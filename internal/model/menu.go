@@ -1,10 +1,12 @@
 package model
 
-type MenuType string
+import (
+	"github.com/xxvlrapss/go_restorant_app.git/internal/model/constant"
+)
 
 type MenuItem struct {
-	Name      string
-	OrderCode string
-	Price     int64
-	Type      MenuType
+	OrderCode string            `gorm:"primaryKey" json:"order_code"`
+	Name      string            `json:"name"`
+	Price     int64             `json:"price"`
+	Type      constant.MenuType `json:"type"`
 }

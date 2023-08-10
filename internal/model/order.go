@@ -1,23 +1,24 @@
 package model
 
-type OrderStatus string
+import "github.com/xxvlrapss/go_restorant_app.git/internal/model/constant"
 
+// Creating a one to many DB approach
 type Order struct {
-	ID            string         `gorm:"primaryKey" json:"id"`
-	Status        OrderStatus    `json:"status"`
-	ProductOrders []ProductOrder `json:"product_orders"`
-	ReferenceID   string         `gorm:"unique" json:"reference_id"`
+	// just note, gorm uses ID field as primary key by default
+	ID            string               `gorm:"primaryKey" json:"id"`
+	UserID        string               `gorm:"index" json:"user_id"`
+	Status        constant.OrderStatus `json:"status"`
+	ProductOrders []ProductOrder       `json:"product_orders"`
+	ReferenceID   string               `gorm:"unique" json:"reference_id"`
 }
 
-type ProductOrderStatus string
-
 type ProductOrder struct {
-	ID         string             `gorm:"primaryKey" json:"id"`
-	OrderID    string             `json:"order_id"`
-	OrderCode  string             `json:"order_code"`
-	Quantity   int                `json:"quantity"`
-	TotalPrice int64              `json:"total_price"`
-	Status     ProductOrderStatus `json:"status"`
+	ID         string
+	OrderID    string
+	OrderCode  string
+	Quantity   int
+	TotalPrice int64
+	Status     constant.ProductOrderStatus
 }
 
 type OrderMenuProductRequest struct {
@@ -26,10 +27,12 @@ type OrderMenuProductRequest struct {
 }
 
 type OrderMenuRequest struct {
+	UserID        string                    `json:"-"`
 	OrderProducts []OrderMenuProductRequest `json:"order_products"`
 	ReferenceID   string                    `json:"reference_id"`
 }
 
 type GetOrderInfoRequest struct {
-	OrderID string `json:"order_id"`
+	OrderID string
+	UserID  string
 }

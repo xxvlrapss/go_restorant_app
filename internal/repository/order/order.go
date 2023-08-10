@@ -15,18 +15,20 @@ func GetRepository(db *gorm.DB) Repository {
 	}
 }
 
-func(or *orderRepo)CreateOrder(order model.Order) (model.Order, error){
+func (or *orderRepo) CreateOrder(order model.Order) (model.Order, error) {
 	if err := or.db.Create(&order).Error; err != nil {
 		return order, err
 	}
-		return model.Order{}, nil
+
+	return order, nil
+}
+
+func (or *orderRepo) GetOrderInfo(orderID string) (model.Order, error) {
+	var data model.Order
+
+	if err := or.db.Where(model.Order{ID: orderID}).Preload("ProductOrders").First(&data).Error; err != nil {
+		return data, err
 	}
 
-func(or *orderRepo)GetOrderInfo(orderID string) (model.Order, error){
-		var data model.Order
-
-		if err := or.db.Where(model.Order{ID: orderID}).Preload("ProductOrders").First(&data).Error; err != nil {
-			return data, err
-		}
-		return data, nil
-	}
+	return data, nil
+}
